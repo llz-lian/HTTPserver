@@ -39,19 +39,29 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
     
     if(writeFd(fd,buf,strlen(buf))!=strlen(buf))
     {
-        perror("<Get::staticGet>writeFd error");
+        perror("<Get::staticGet>writeFd error1");
         return;
     }    
-
+    /*mmap*/
+    int filefd;
+    if((filefd = open(file_name,O_RDONLY,0))<0)
+    {
+        perror("<Get::staticGet>open");
+        return;
+    }
+    int len = lseek(filefd,0,SEEK_END);  
+    char *addr = (char *) mmap(0, file_size, PROT_READ, MAP_PRIVATE,filefd, 0);
+    close(filefd);
+/*
     if(readFile(file_name,buf,Server::BUFFER_SIZE)<0)
     {
         perror("<Get::staticGet>read error");
         return;
     }
-
-    if(writeFd(fd,buf,strlen(buf))!=strlen(buf))
+*/
+    if(writeFd(fd,addr,file_size)!=file_size)
     {
-        perror("<Get::staticGet>writeFd error");
+        perror("<Get::staticGet>writeFd error2");
         return;
     }
 }
