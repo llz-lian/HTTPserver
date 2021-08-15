@@ -71,7 +71,7 @@ clean: src/clean
 # Directory level rules for directory src
 
 # Recursive "all" directory target.
-src/all: src/CMakeFiles/main.dir/all
+src/all: src/CMakeFiles/mywebserver.dir/all
 
 .PHONY : src/all
 
@@ -81,36 +81,36 @@ src/preinstall:
 .PHONY : src/preinstall
 
 # Recursive "clean" directory target.
-src/clean: src/CMakeFiles/main.dir/clean
+src/clean: src/CMakeFiles/mywebserver.dir/clean
 
 .PHONY : src/clean
 
 #=============================================================================
-# Target rules for target src/CMakeFiles/main.dir
+# Target rules for target src/CMakeFiles/mywebserver.dir
 
 # All Build rule for target.
-src/CMakeFiles/main.dir/all:
-	$(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/depend
-	$(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/llz/HTTPserver/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target main"
-.PHONY : src/CMakeFiles/main.dir/all
+src/CMakeFiles/mywebserver.dir/all:
+	$(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/depend
+	$(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/llz/HTTPserver/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target mywebserver"
+.PHONY : src/CMakeFiles/mywebserver.dir/all
 
 # Build rule for subdir invocation for target.
-src/CMakeFiles/main.dir/rule: cmake_check_build_system
+src/CMakeFiles/mywebserver.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/llz/HTTPserver/build/CMakeFiles 6
-	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/main.dir/all
+	$(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/mywebserver.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/llz/HTTPserver/build/CMakeFiles 0
-.PHONY : src/CMakeFiles/main.dir/rule
+.PHONY : src/CMakeFiles/mywebserver.dir/rule
 
 # Convenience name for target.
-main: src/CMakeFiles/main.dir/rule
+mywebserver: src/CMakeFiles/mywebserver.dir/rule
 
-.PHONY : main
+.PHONY : mywebserver
 
 # clean rule for target.
-src/CMakeFiles/main.dir/clean:
-	$(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/clean
-.PHONY : src/CMakeFiles/main.dir/clean
+src/CMakeFiles/mywebserver.dir/clean:
+	$(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/clean
+.PHONY : src/CMakeFiles/mywebserver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

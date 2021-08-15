@@ -111,19 +111,19 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-src/CMakeFiles/main.dir/rule:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/main.dir/rule
-.PHONY : src/CMakeFiles/main.dir/rule
+src/CMakeFiles/mywebserver.dir/rule:
+	cd /home/llz/HTTPserver/build && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/mywebserver.dir/rule
+.PHONY : src/CMakeFiles/mywebserver.dir/rule
 
 # Convenience name for target.
-main: src/CMakeFiles/main.dir/rule
+mywebserver: src/CMakeFiles/mywebserver.dir/rule
 
-.PHONY : main
+.PHONY : mywebserver
 
 # fast build rule for target.
-main/fast:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/build
-.PHONY : main/fast
+mywebserver/fast:
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/build
+.PHONY : mywebserver/fast
 
 head.o: head.cpp.o
 
@@ -131,7 +131,7 @@ head.o: head.cpp.o
 
 # target to build an object file
 head.cpp.o:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/head.cpp.o
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/head.cpp.o
 .PHONY : head.cpp.o
 
 head.i: head.cpp.i
@@ -140,7 +140,7 @@ head.i: head.cpp.i
 
 # target to preprocess a source file
 head.cpp.i:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/head.cpp.i
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/head.cpp.i
 .PHONY : head.cpp.i
 
 head.s: head.cpp.s
@@ -149,7 +149,7 @@ head.s: head.cpp.s
 
 # target to generate assembly for a file
 head.cpp.s:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/head.cpp.s
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/head.cpp.s
 .PHONY : head.cpp.s
 
 http.o: http.cpp.o
@@ -158,7 +158,7 @@ http.o: http.cpp.o
 
 # target to build an object file
 http.cpp.o:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/http.cpp.o
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/http.cpp.o
 .PHONY : http.cpp.o
 
 http.i: http.cpp.i
@@ -167,7 +167,7 @@ http.i: http.cpp.i
 
 # target to preprocess a source file
 http.cpp.i:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/http.cpp.i
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/http.cpp.i
 .PHONY : http.cpp.i
 
 http.s: http.cpp.s
@@ -176,7 +176,7 @@ http.s: http.cpp.s
 
 # target to generate assembly for a file
 http.cpp.s:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/http.cpp.s
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/http.cpp.s
 .PHONY : http.cpp.s
 
 main.o: main.cpp.o
@@ -185,7 +185,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/main.cpp.o
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -194,7 +194,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/main.cpp.i
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -203,7 +203,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/main.cpp.s
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 send.o: send.cpp.o
@@ -212,7 +212,7 @@ send.o: send.cpp.o
 
 # target to build an object file
 send.cpp.o:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/send.cpp.o
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/send.cpp.o
 .PHONY : send.cpp.o
 
 send.i: send.cpp.i
@@ -221,7 +221,7 @@ send.i: send.cpp.i
 
 # target to preprocess a source file
 send.cpp.i:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/send.cpp.i
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/send.cpp.i
 .PHONY : send.cpp.i
 
 send.s: send.cpp.s
@@ -230,7 +230,7 @@ send.s: send.cpp.s
 
 # target to generate assembly for a file
 send.cpp.s:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/send.cpp.s
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/send.cpp.s
 .PHONY : send.cpp.s
 
 server.o: server.cpp.o
@@ -239,7 +239,7 @@ server.o: server.cpp.o
 
 # target to build an object file
 server.cpp.o:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/server.cpp.o
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/server.cpp.o
 .PHONY : server.cpp.o
 
 server.i: server.cpp.i
@@ -248,7 +248,7 @@ server.i: server.cpp.i
 
 # target to preprocess a source file
 server.cpp.i:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/server.cpp.i
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/server.cpp.i
 .PHONY : server.cpp.i
 
 server.s: server.cpp.s
@@ -257,7 +257,7 @@ server.s: server.cpp.s
 
 # target to generate assembly for a file
 server.cpp.s:
-	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/main.dir/build.make src/CMakeFiles/main.dir/server.cpp.s
+	cd /home/llz/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/server.cpp.s
 .PHONY : server.cpp.s
 
 # Help Target
@@ -268,7 +268,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... main"
+	@echo "... mywebserver"
 	@echo "... head.o"
 	@echo "... head.i"
 	@echo "... head.s"

@@ -21,6 +21,8 @@ sys/stat.h
 -
 sys/mman.h
 -
+signal.h
+-
 sys/ioctl.h
 -
 unistd.h
@@ -43,6 +45,8 @@ iostream
 -
 sstream
 -
+thread
+-
 
 ../include/http.hpp
 head.hpp
@@ -58,7 +62,23 @@ server.hpp
 head.hpp
 -
 
+/home/llz/HTTPserver/src/http.cpp
+http.hpp
+-
+send.hpp
+-
+
+/home/llz/HTTPserver/src/main.cpp
+server.hpp
+-
+
 /home/llz/HTTPserver/src/send.cpp
 send.hpp
+-
+
+/home/llz/HTTPserver/src/server.cpp
+server.hpp
+-
+http.hpp
 -
 
