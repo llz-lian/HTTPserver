@@ -1,22 +1,30 @@
-#include<send.h>
+#include<send.hpp>
 
 Get::Get(Http * http,int fd):SendHttp(http,fd)
 {
-    cgi_args = new vector<string>;
-    cgi_args = getUri(http,getFileName());
-    is_static = cgi_args->size()==0;
-    cout<<getFileName()<<endl;
-    if(stat(getFileName().c_str(),&status)<0)
-    {       //add http
-        char buf[Server::BUFFER_SIZE] = "Http/1.0 404 Not Found\r\n";
-        writeFd(fd,buf,strlen(buf));
-        
-        perror("<Get::Get>stat");
+    //cgi_args = new vector<string>;
+    try
+    {
+        /* code */
+        cgi_args = getUri(http,getFileName());
+        is_static = cgi_args->size()==0;
+        //cout<<getFileName()<<endl;
+        if(stat(getFileName().c_str(),&status)<0)
+        {       //add http
+            throw string("<Get::Get>no such file.");
+        }
     }
+    catch(const std::string& e)
+    {
+        std::cerr << e << '\n';
+        status.st_size = 0;
+        sendBad(fd);
+    }
+    
 }
 Get::~Get()
 {
-    delete cgi_args;
+    
 }
 int Get::sendData()
 {
@@ -37,11 +45,11 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
     sprintf(buf,"%sContent-length:%d\r\n",buf,file_size);
     sprintf(buf,"%sContent-type:%s\r\n\r\n",buf,file_type);
     
-    if(writeFd(fd,buf,strlen(buf))!=strlen(buf))
+    if(sendHead(fd,buf)<0)
     {
-        perror("<Get::staticGet>writeFd error1");
+        perror("<Get::staticGet>sendHead");
         return;
-    }    
+    }
     /*mmap*/
     int filefd;
     if((filefd = open(file_name,O_RDONLY,0))<0)
@@ -61,7 +69,7 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
 */
     if(writeFd(fd,addr,file_size)!=file_size)
     {
-        perror("<Get::staticGet>writeFd error2");
+        perror("<Get::staticGet>writeFd error");
         return;
     }
 }
@@ -70,3 +78,6 @@ void Get::dynamicGet(int fd,const char * file_name)
 {
 
 }
+
+
+

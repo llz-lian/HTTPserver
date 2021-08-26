@@ -1,5 +1,5 @@
-#include<server.h>
-#include<http.h>
+#include<server.hpp>
+#include<http.hpp>
 
 
 Server::Server()
@@ -26,7 +26,7 @@ Server::Server()
     }
     printf("bind success.\n");
     //listen
-    if(listen(sockfd,MAX_Q_NUM)<0)
+    if(listen(sockfd,MAX_Q_NUM)<0)// queue
     {
         perror("listen error");
         exit(1);
@@ -41,10 +41,12 @@ void Server::startLoop(int fd)
 {
     FD_ZERO(&block_read_fdset);
     max_fd = fd+1;
+    //signal(SIGCHLD, SIG_IGN);
     for(;;)
     {
+        
         BOA_FD_SET(fd,&block_read_fdset);
-        if(select(max_fd+1,&block_read_fdset,nullptr,nullptr,nullptr)==-1)
+        if(select(max_fd+1,&block_read_fdset,nullptr,nullptr,nullptr)==-1)// 保险+1
         {
             printf("select");
             if(errno == EINTR)
@@ -55,20 +57,28 @@ void Server::startLoop(int fd)
                 
             else if(errno != EBADF)
             {
-                perror("select error.");
+                perror("<Server::startloop>select error.");
             }
         }
         if(FD_ISSET(fd,&block_read_fdset))
         {
-            processRequests(fd);
+            tp.commit(&Server::processRequests,fd);
+            /*
+            {
+                pthread = new thread(&Server::processRequests,fd);
+                (*pthread).detach();
+            }
+            
+            processRequests(fd);*/
         }
+
     }
     cout<<"whaaaat??";
 }
 int Server::processRequests(int server_s)
 {
-    char buff[BUFFER_SIZE];
-    memset(&buff,0,BUFFER_SIZE*sizeof(char));
+    char * buff = new char[BUFFER_SIZE];
+    /*memset(&buff,0,BUFFER_SIZE*sizeof(char));
     sockaddr_in client_addr;
     size_t size=sizeof(struct sockaddr);
     int clientfd = accept(server_s,(sockaddr*)&client_addr,(socklen_t*)&size);
@@ -86,20 +96,30 @@ int Server::processRequests(int server_s)
             read_num = 0;
         else
             return -2;
+    
     }
+    clientADDR(client_addr);*/
     //printf("receive:%s.\n",buff);
-    clientADDR(client_addr);
+    int clientfd = readData(server_s,buff);
+    if(clientfd<0)
+    {
+        perror("<Server::processRequests>readData error");
+        return 0;
+    }
     Http * http = new Http(buff);
 
     http->sendData(clientfd);
 
     delete http;
+    delete[] buff;
+   
+    close(clientfd); 
     cout<<"process over.\n";
-    close(clientfd);
     return 0;
 }
 void Server::startServer()
 {
+    //加信息
     startLoop(sockfd);
 }
 
@@ -110,3 +130,26 @@ void Server::clientADDR(sockaddr_in & addr)
     printf("client ip,port:[%s,%d].\n",ip,ntohs(addr.sin_port));
 }
 
+int Server::readData(int fd, char * buf)
+{
+    //memset(&buf,0,BUFFER_SIZE*sizeof(char));
+    sockaddr_in client_addr;
+    size_t size=sizeof(struct sockaddr);
+    int clientfd = accept(fd,(sockaddr*)&client_addr,(socklen_t*)&size);
+    if(clientfd<0)
+    {
+        perror("<Server::readData>accept client error");
+        return -1;
+    }
+    int read_num = read(clientfd,buf,BUFFER_SIZE);
+    if(read_num<0)
+    {
+        if(errno == EINTR)
+            read_num = 0;
+        else
+            return -2;
+    }
+    //printf("receive:%s.\n",buff);
+    clientADDR(client_addr);
+    return clientfd;
+}

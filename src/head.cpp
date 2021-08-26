@@ -1,4 +1,4 @@
-#include<head.h>
+#include<head.hpp>
 int writeFd(int fd,char * buff,size_t len)
 {
     ssize_t written;
@@ -7,7 +7,7 @@ int writeFd(int fd,char * buff,size_t len)
     {
         if((written = write(fd,buff,len))<=0)
         {
-            perror("write err");
+            perror("<writeFd>write err");
             if(errno == EINTR)
                 written = 0;
             else
@@ -43,3 +43,5 @@ int readFile(const char * file_name,char * buff,int len)
     buff[file_size] = '\0';
     fclose(fp);
 }
+
+
