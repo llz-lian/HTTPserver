@@ -5,17 +5,18 @@ class SendHttp
 {
 private:
     /* data */
-    Http * http;
+    shared_ptr<Http> http;
     
     string file_name;
     
 public:
     int clientfd;
-    friend shared_ptr<vector<string>>  getUri(const Http * http,string & file_name);
+    friend shared_ptr<vector<string>>  getUri(shared_ptr<Http> http,string & file_name);
     virtual int sendData()=0;
-    SendHttp(Http * Http,int clientfd,string name = "./pages")
+    SendHttp(shared_ptr<Http> http,int clientfd,string name = "./pages")
     {
         this->clientfd = clientfd;
+        
         this->http = http;
         file_name = name;
     }
@@ -40,6 +41,13 @@ public:
     inline string & getFileName(){
         return file_name;
     }
+    inline string & getUrl(){
+        return http->url;
+    }
+
+    inline const map<string,string> & getMap(){
+        return http->header;
+    };
 };
 
 class Get:public SendHttp
@@ -47,13 +55,13 @@ class Get:public SendHttp
 private:
     /* data */
     struct stat status;
-    shared_ptr<vector<string>> cgi_args = make_shared<vector<string>>();;
+    shared_ptr<vector<string>> cgi_args = make_shared<vector<string>>();
     bool is_static;
     void staticGet(int fd,const char * file_name,int file_size);
     void dynamicGet(int fd,const char * file_name);
 public:
     virtual int sendData();
-    Get(Http * http,int fd);
+    Get(shared_ptr<Http> http,int fd);
     virtual ~Get();
 };
 
@@ -61,13 +69,11 @@ public:
 class Post:public SendHttp
 {
 private:
-    vector<string> * args;
+    shared_ptr<vector<string>> cgi_args = make_shared<vector<string>>();
+    const string * post_body;
+    struct stat status;
 public:
-    Post(Http * http,int fd):SendHttp(http,fd){
-
-    };
-    virtual int sendData(){
-        return 0;
-    };
+    Post(shared_ptr<Http> http,int fd);
+    virtual int sendData();
     virtual ~Post(){};
 };

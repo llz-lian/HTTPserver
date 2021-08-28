@@ -106,11 +106,12 @@ int Server::processRequests(int server_s)
         perror("<Server::processRequests>readData error");
         return 0;
     }
-    Http * http = new Http(buff);
-
+    shared_ptr<Http> http = make_shared<Http>(buff);
+    //Http * http = new Http(buff);
+    
     http->sendData(clientfd);
 
-    delete http;
+    //delete http;
     delete[] buff;
    
     close(clientfd); 

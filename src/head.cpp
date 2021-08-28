@@ -1,5 +1,5 @@
 #include<head.hpp>
-int writeFd(int fd,char * buff,size_t len)
+int writeFd(int fd,const char * buff,size_t len)
 {
     ssize_t written;
     size_t n = len;
@@ -42,6 +42,7 @@ int readFile(const char * file_name,char * buff,int len)
     fread( buff , file_size , sizeof(char) , fp);
     buff[file_size] = '\0';
     fclose(fp);
+    return 0;
 }
 
 

@@ -3,8 +3,8 @@
 #include<head.hpp>
 class Http;
 //vector<string> *  getUri(const Http * http,string & file_name);
-shared_ptr<vector<string>> getUri(const Http * http,string & file_name);
-class Http
+shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name);
+class Http:public enable_shared_from_this<Http>
 {
 private:
     /* data */
@@ -24,12 +24,20 @@ private:
     void getBody(const string &&body);//得到请求本体
 public:
     //friend vector<string> *  getUri(const Http * http,string & file_name);
-    friend shared_ptr<vector<string>> getUri(const Http * http,string & file_name);
+    friend shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name);
     friend class SendHttp;
     void show();
 
+
+    const string * postData(){
+        return body;
+    };
+
     void sendData(int fd);
     Http(const string & request);
+    shared_ptr<Http> getThis(){
+        return shared_from_this();
+    };
     ~Http();
 };
 

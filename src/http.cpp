@@ -1,6 +1,5 @@
 #include<http.hpp>
 #include<send.hpp>
-
 Http::Http(/* args */const string & request)
 {
     data = &request;
@@ -118,17 +117,24 @@ void Http::getBody(const string &&body)
 
 void Http::sendData(int fd)
 {
-    SendHttp * send;
+	shared_ptr<SendHttp> send;
+    //SendHttp * send;
+	shared_ptr<Http> this_http = getThis();
     if(method=="GET")
     {
-        send = new Get(this,fd);//add thread
+		send = make_shared<Get>(Get(this_http,fd));
+        //send = new Get(this,fd);//add thread
     }
 	else if(method=="POST")
 	{
-		send = new Post(this,fd);
+		send = make_shared<Post>(Post(this_http,fd));
+		//send = new Post(this,fd);
+	}else{
+		send = make_shared<Get>(Get(this_http,fd));
+		//send = new Get(this,fd);
 	}
 	send->sendData();
-	delete send;
+	//delete send;
 }
 
 void Http::show()
@@ -145,12 +151,14 @@ void Http::show()
 }
 
 
-shared_ptr<vector<string>> getUri(const Http * http,string & file_name)
+shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name)
 {
     // /index.html  /home.html /{}/x.html
+		
 	shared_ptr<vector<string>> args = make_shared<vector<string>>();
+	if(http==nullptr)
+		return args;
     //vector<string> * args = new vector<string>;
-
     if(http->url.find("cgi-bin")== string::npos)//not cgi
     {
         if(http->url=="/")
@@ -159,7 +167,7 @@ shared_ptr<vector<string>> getUri(const Http * http,string & file_name)
         }else{
             file_name += http->url;
         }   
-    }else{//  /path?xxx=aaa&ooo=bbb
+    }else{//  /cgi-bin/x.cgi(?xxx=aaa&ooo=bbb/)
 		int arg_start = 0;
 		int url_len = http->url.size();
 		while(arg_start<url_len&&http->url[arg_start]!='?')
@@ -169,15 +177,12 @@ shared_ptr<vector<string>> getUri(const Http * http,string & file_name)
 		if(arg_start>=url_len)
 		{
 			//cout<<"<getUri>bad url"<<endl;
-			throw string("<getUri>bad url");
+			//throw string("<getUri>bad url");
+			args->push_back(file_name + http->url);
+			args->push_back("");
 			return args;
 		}
-		int cgi_start = arg_start;
-		while(cgi_start>=0&&http->url[cgi_start]!='/')
-		{
-			cgi_start--;/* /path? */
-		}	
-		args->push_back(http->url.substr(cgi_start,arg_start-cgi_start+1));  // cgi_name
+		args->push_back(file_name + http->url);  // cgi_name   /pages/cgi-bin/xxx.cgi
 		args->push_back(http->url.substr(arg_start,url_len - arg_start));    // args
     }
     return args;
