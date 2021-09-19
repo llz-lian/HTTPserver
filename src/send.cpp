@@ -42,11 +42,13 @@ int Get::sendData()
 void Get::staticGet(int fd,const char * file_name,int file_size)
 {
     char * send_html,file_type[MAX_LEN],buf[Server::BUFFER_SIZE];
+    memset(buf,0,sizeof(buf));
     getFileType(getFileName().c_str(),file_type);
-    sprintf(buf,"Http/1.0 200 OK\r\n");
-    sprintf(buf,"%sServer:my web server\r\n",buf);
-    sprintf(buf,"%sContent-length:%d\r\n",buf,file_size);
-    sprintf(buf,"%sContent-type:%s\r\n\r\n",buf,file_type);
+    char * ptr = &buf[0];
+    ptr += snprintf(ptr,sizeof(buf),"HTTP/1.0 200 OK\r\n");
+    ptr += snprintf(ptr,sizeof(buf),"Server:my web server\r\n");
+    ptr += snprintf(ptr,sizeof(buf),"Content-length:%d\r\n",file_size);
+    ptr += snprintf(ptr,sizeof(buf),"Content-type:%s\r\n\r\n",file_type);
     
     if(sendHead(fd,buf)<0)
     {
@@ -87,6 +89,7 @@ void Get::dynamicGet(int fd,const char * file_name)
         return;
     }
     char * send_html,file_type[MAX_LEN],buf[Server::BUFFER_SIZE];
+    /*
     getFileType(getFileName().c_str(),file_type);
     sprintf(buf,"Http/1.0 200 OK\r\n");
     sprintf(buf,"%sServer:my web server\r\n",buf);
@@ -96,7 +99,7 @@ void Get::dynamicGet(int fd,const char * file_name)
     {
         perror("<Get::dynamicGet>sendHead");
         return;
-    }
+    }*/
     //cout<<"cgi-args:"<<(*cgi_args)[0]<<" "<<(*cgi_args)[1]<<endl;
     char * list[] = {const_cast<char *>((*cgi_args)[0].c_str()),const_cast<char *>((*cgi_args)[1].c_str()),(char *)0};
 

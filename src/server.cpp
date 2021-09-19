@@ -42,6 +42,7 @@ void Server::startLoop(int fd)
     FD_ZERO(&block_read_fdset);
     max_fd = fd+1;
     //signal(SIGCHLD, SIG_IGN);
+    int cnt = 0;
     for(;;)
     {
         
@@ -60,6 +61,13 @@ void Server::startLoop(int fd)
                 perror("<Server::startloop>select error.");
             }
         }
+        cnt++;
+        if(cnt>1000)
+        {
+            tp.restart();
+            cnt = 0;
+        }
+        tp.showPoolStat();
         if(FD_ISSET(fd,&block_read_fdset))
         {
             tp.commit(&Server::processRequests,fd);
@@ -78,8 +86,8 @@ void Server::startLoop(int fd)
 int Server::processRequests(int server_s)
 {
     char * buff = new char[BUFFER_SIZE];
-    /*memset(&buff,0,BUFFER_SIZE*sizeof(char));
-    sockaddr_in client_addr;
+    memset(buff,0,sizeof(char)*BUFFER_SIZE);
+    /*sockaddr_in client_addr;
     size_t size=sizeof(struct sockaddr);
     int clientfd = accept(server_s,(sockaddr*)&client_addr,(socklen_t*)&size);
 
@@ -106,7 +114,7 @@ int Server::processRequests(int server_s)
         perror("<Server::processRequests>readData error");
         return 0;
     }
-    shared_ptr<Http> http = make_shared<Http>(buff);
+    shared_ptr<Http> http = make_shared<Http>(string(buff));
     //Http * http = new Http(buff);
     
     http->sendData(clientfd);
@@ -115,7 +123,7 @@ int Server::processRequests(int server_s)
     delete[] buff;
    
     close(clientfd); 
-    cout<<"process over.\n";
+    //cout<<"process over.\n";
     return 0;
 }
 void Server::startServer()
@@ -128,7 +136,7 @@ void Server::clientADDR(sockaddr_in & addr)
 {
     char ip[32];
     inet_ntop(AF_INET,&addr.sin_addr,ip,sizeof(ip));
-    printf("client ip,port:[%s,%d].\n",ip,ntohs(addr.sin_port));
+    //printf("client ip,port:[%s,%d].\n",ip,ntohs(addr.sin_port));
 }
 
 int Server::readData(int fd, char * buf)

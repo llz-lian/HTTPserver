@@ -13,6 +13,7 @@ class threadpool
 private:
 	/* data */
 	const int MAX_SIZE = 128;
+	const int MIN_SIZE = 16;
 	using Task = std::function<void()>;
 	std::vector<std::thread> pool;
 	std::queue<Task> tasks;
@@ -20,6 +21,8 @@ private:
 	std::condition_variable task_cv;
 	std::atomic<bool> is_run{ true };
 	std::atomic<int> idle{ 0 };
+	std::atomic<bool> drop{ false };
+	std::atomic<int> drop_num{0};
 public:
 	threadpool(size_t n = 16) {
 		addThread(n);
@@ -41,11 +44,20 @@ public:
 							task = std::move(tasks.front());
 							tasks.pop();
 						}
+						idle--;
 						task();
+						if(drop&&drop_num>0)
+						{
+							drop_num--;
+							return;
+						}
+						idle++;
+						
 					/* code */
-				}
+					}
 				}
 			);
+			idle++;
 		}
 	};
 	template<class F, class... Args>
@@ -60,6 +72,7 @@ public:
 			tasks.emplace([task]() {(*task)(); });//lambda执行task构造
 		}
 		task_cv.notify_one();
+		grow();
 		return future;
 	}
 	~threadpool() {
@@ -73,4 +86,57 @@ public:
 			}
 		}
 	};
+
+	void grow()
+	{
+		if(tasks.size()>pool.size()*1.5)
+		{
+			addThread(pool.size());
+		}
+		else if(pool.size()>tasks.size())
+		{
+			drop_num = (pool.size() - tasks.size()) * 2 / 3;
+			if(pool.size()-drop_num<MIN_SIZE)
+				return;
+			drop = true;
+			for (std::thread & thread : pool)
+			{
+				if (thread.joinable())
+				{
+					thread.join();
+				}
+				
+			}
+			drop_num = 0;
+			drop = false;
+		}
+		
+	}
+
+	void restart(){
+		int n = pool.size();
+		if(tasks.empty())
+		{
+			is_run = false;
+			task_cv.notify_all();
+			for (std::thread & thread : pool)
+			{
+				if (thread.joinable())
+				{
+					thread.join();
+				}
+			}
+			is_run = true;
+			addThread(n);
+			std::cout<<"restart thread"<<std::endl;
+		}
+	}
+	void showPoolStat()
+	{
+		std::cout<<"Task num:"<<tasks.size()<<std::endl;
+		std::cout<<"Thread num:"<<pool.size()<<std::endl;
+		std::cout<<"Thread idle:"<<idle<<std::endl<<std::endl;
+	}
+
+
 };
