@@ -48,6 +48,10 @@ public:
     inline const map<string,string> & getMap(){
         return http->header;
     };
+
+    inline void showInfo() const{
+        http->showInfo();
+    }
 };
 
 class Get:public SendHttp

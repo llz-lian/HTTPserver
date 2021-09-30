@@ -18,11 +18,11 @@ Get::Get(shared_ptr<Http> http,int fd):SendHttp(http,fd)
     }
     catch(const std::string& e)
     {
+        showInfo();
         std::cerr << e << '\n';
         status.st_size = 0;
         sendBad(fd);
     }
-    
 }
 Get::~Get()
 {
@@ -52,6 +52,7 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
     
     if(sendHead(fd,buf)<0)
     {
+        showInfo();
         perror("<Get::staticGet>sendHead");
         return;
     }
@@ -59,6 +60,7 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
     int filefd;
     if((filefd = open(file_name,O_RDONLY,0))<0)
     {
+        showInfo();
         perror("<Get::staticGet>open");
         return;
     }
@@ -74,8 +76,7 @@ void Get::staticGet(int fd,const char * file_name,int file_size)
 */
     if(writeFd(fd,addr,file_size)!=file_size)
     {
-        printf("%s\n",file_name);
-        cout<<getUrl();
+        showInfo();
         perror("<Get::staticGet>writeFd error");
         return;
     }
@@ -85,6 +86,7 @@ void Get::dynamicGet(int fd,const char * file_name)
 {
     if(cgi_args->size()<2)
     {
+        showInfo();
         perror("<Get::dynamicGet>cgiargs error");
         return;
     }

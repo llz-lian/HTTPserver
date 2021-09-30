@@ -11,7 +11,7 @@ private:
     int max_fd;
     fd_set block_read_fdset;
     static int processRequests(int server_s);
-    static inline int readData(int fd,char * buf);
+    static inline int readData(int fd,char * buf,sockaddr_in & client_addr);
     static inline void clientADDR(sockaddr_in & adddr);
     threadpool tp{16};
 public:

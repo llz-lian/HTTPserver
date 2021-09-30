@@ -1,11 +1,12 @@
 #include<http.hpp>
 #include<send.hpp>
-Http::Http(/* args */const string & request)
+/*Http::Http(const string & request,const sinfo & in):info(in)
 {
     data = &request;
     paser(request);
     pos = 0;
-}
+
+}*/
 Http::~Http()
 {
 }
@@ -137,7 +138,7 @@ void Http::sendData(int fd)
 	//delete send;
 }
 
-void Http::show()
+void Http::show() const
 {
     cout<<"http method:"<<method<<endl;
     cout<<"http url:"<<url<<endl;

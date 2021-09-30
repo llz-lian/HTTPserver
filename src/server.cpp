@@ -41,7 +41,6 @@ void Server::startLoop(int fd)
 {
     FD_ZERO(&block_read_fdset);
     max_fd = fd+1;
-    //signal(SIGCHLD, SIG_IGN);
     int cnt = 0;
     for(;;)
     {
@@ -67,17 +66,9 @@ void Server::startLoop(int fd)
             tp.restart();
             cnt = 0;
         }
-        tp.showPoolStat();
         if(FD_ISSET(fd,&block_read_fdset))
         {
             tp.commit(&Server::processRequests,fd);
-            /*
-            {
-                pthread = new thread(&Server::processRequests,fd);
-                (*pthread).detach();
-            }
-            
-            processRequests(fd);*/
         }
 
     }
@@ -87,43 +78,19 @@ int Server::processRequests(int server_s)
 {
     char * buff = new char[BUFFER_SIZE];
     memset(buff,0,sizeof(char)*BUFFER_SIZE);
-    /*sockaddr_in client_addr;
-    size_t size=sizeof(struct sockaddr);
-    int clientfd = accept(server_s,(sockaddr*)&client_addr,(socklen_t*)&size);
-
-    if(clientfd<0)
-    {
-        perror("<Server::processRequests>accept client error");
-        return -1;
-    }
-
-    int read_num = read(clientfd,buff,BUFFER_SIZE);
-    if(read_num<0)
-    {
-        if(errno == EINTR)
-            read_num = 0;
-        else
-            return -2;
-    
-    }
-    clientADDR(client_addr);*/
-    //printf("receive:%s.\n",buff);
-    int clientfd = readData(server_s,buff);
+    sockaddr_in clientADDR;
+    int clientfd = readData(server_s,buff,clientADDR);
     if(clientfd<0)
     {
         perror("<Server::processRequests>readData error");
         return 0;
     }
-    shared_ptr<Http> http = make_shared<Http>(string(buff));
-    //Http * http = new Http(buff);
-    
-    http->sendData(clientfd);
+    sinfo info(clientADDR);
 
-    //delete http;
+    shared_ptr<Http> http = make_shared<Http>(string(buff),info);
+    http->sendData(clientfd);
     delete[] buff;
-   
     close(clientfd); 
-    //cout<<"process over.\n";
     return 0;
 }
 void Server::startServer()
@@ -136,13 +103,12 @@ void Server::clientADDR(sockaddr_in & addr)
 {
     char ip[32];
     inet_ntop(AF_INET,&addr.sin_addr,ip,sizeof(ip));
-    //printf("client ip,port:[%s,%d].\n",ip,ntohs(addr.sin_port));
+    this_thread::get_id();
+    printf("client ip,port:[%s,%d].\n",ip,ntohs(addr.sin_port));
 }
 
-int Server::readData(int fd, char * buf)
+int Server::readData(int fd, char * buf, sockaddr_in & client_addr)
 {
-    //memset(&buf,0,BUFFER_SIZE*sizeof(char));
-    sockaddr_in client_addr;
     size_t size=sizeof(struct sockaddr);
     int clientfd = accept(fd,(sockaddr*)&client_addr,(socklen_t*)&size);
     if(clientfd<0)
@@ -158,7 +124,5 @@ int Server::readData(int fd, char * buf)
         else
             return -2;
     }
-    //printf("receive:%s.\n",buff);
-    clientADDR(client_addr);
     return clientfd;
 }

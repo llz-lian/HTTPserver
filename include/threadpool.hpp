@@ -138,5 +138,4 @@ public:
 		std::cout<<"Thread idle:"<<idle<<std::endl<<std::endl;
 	}
 
-
 };
