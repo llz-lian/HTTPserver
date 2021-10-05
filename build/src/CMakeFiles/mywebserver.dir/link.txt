@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/mywebserver.dir/head.cpp.o CMakeFiles/mywebserver.dir/http.cpp.o CMakeFiles/mywebserver.dir/main.cpp.o CMakeFiles/mywebserver.dir/send.cpp.o CMakeFiles/mywebserver.dir/server.cpp.o  -o ../../bin/mywebserver  -lpthread 
