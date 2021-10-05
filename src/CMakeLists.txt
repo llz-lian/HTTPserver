@@ -4,9 +4,15 @@ AUX_SOURCE_DIRECTORY(. SRC_LIST)
 
 find_package (Threads)
 
-INCLUDE_DIRECTORIES(../include)
+INCLUDE_DIRECTORIES(
+../include
+)
+
+link_directories(../lib/libsql1.a)
 
 ADD_EXECUTABLE(mywebserver ${SRC_LIST})
+
+target_link_libraries (${PROJECT_NAME} /usr/lib/x86_64-linux-gnu/libmysqlclient.so)
 
 target_link_libraries (${PROJECT_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
