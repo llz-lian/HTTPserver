@@ -1,0 +1,5 @@
+#CMAKE files
+./build/*
+
+#bin files
+./bin/*
