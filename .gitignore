@@ -1,5 +1,5 @@
 #CMAKE files
-build/*
+build/
 
 #bin files
-bin/*
+bin/
