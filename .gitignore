@@ -1,5 +1,7 @@
 #CMAKE files
-build/
-
+/build
+/build/CMakeFiles
+/build/src
+/lib/build
 #bin files
-bin/
+/bin
