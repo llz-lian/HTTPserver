@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/llz/code/HTTPserver/src/db.cpp
+mysql/mysql.h
+-
+string
+-
+string.h
+-
+stdio.h
+-
+iostream
+-
+

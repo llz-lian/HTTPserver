@@ -62,7 +62,7 @@ public:
 
 
 
-int connectMysql(MYSQL & sql,connection & c) throw(int)
+int connectMysql(MYSQL & sql,connection & c) //throw(int)
 {
     if(!mysql_real_connect(&sql,c.host_name.c_str()
     ,c.usr_name.c_str(),c.passwd.c_str(),c.database.c_str(),c.port,
@@ -74,7 +74,7 @@ int connectMysql(MYSQL & sql,connection & c) throw(int)
     cout<<"connected"<<endl;
     return 0;
 }
-MYSQL_RES * sqlQuery(MYSQL &sql,char * sql_q,unsigned int len) throw(int)
+MYSQL_RES * sqlQuery(MYSQL &sql,char * sql_q,unsigned int len) //throw(int)
 {
     if(mysql_real_query(&sql,sql_q,len))
     {
@@ -88,18 +88,4 @@ MYSQL_RES * sqlQuery(MYSQL &sql,char * sql_q,unsigned int len) throw(int)
         }
         return res;
     }
-}
-
-void searchDB(MYSQL &mysql,char * sql,unsigned int len)
-{
-
-}
-
-int main()
-{
-    connection c;
-    MYSQL sql;
-
-
-    return 0;
 }

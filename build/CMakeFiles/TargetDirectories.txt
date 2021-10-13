@@ -1,0 +1,8 @@
+/home/llz/code/HTTPserver/build/CMakeFiles/rebuild_cache.dir
+/home/llz/code/HTTPserver/build/CMakeFiles/edit_cache.dir
+/home/llz/code/HTTPserver/lib/build/CMakeFiles/rebuild_cache.dir
+/home/llz/code/HTTPserver/lib/build/CMakeFiles/edit_cache.dir
+/home/llz/code/HTTPserver/lib/build/CMakeFiles/sql_static.dir
+/home/llz/code/HTTPserver/build/src/CMakeFiles/rebuild_cache.dir
+/home/llz/code/HTTPserver/build/src/CMakeFiles/edit_cache.dir
+/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir

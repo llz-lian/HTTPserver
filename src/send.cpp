@@ -91,20 +91,7 @@ void Get::dynamicGet(int fd,const char * file_name)
         return;
     }
     char * send_html,file_type[MAX_LEN],buf[Server::BUFFER_SIZE];
-    /*
-    getFileType(getFileName().c_str(),file_type);
-    sprintf(buf,"Http/1.0 200 OK\r\n");
-    sprintf(buf,"%sServer:my web server\r\n",buf);
-    sprintf(buf,"%sContent-type:%s\r\n\r\n",buf,file_type);
-    
-    if(sendHead(fd,buf)<0)
-    {
-        perror("<Get::dynamicGet>sendHead");
-        return;
-    }*/
-    //cout<<"cgi-args:"<<(*cgi_args)[0]<<" "<<(*cgi_args)[1]<<endl;
     char * list[] = {const_cast<char *>((*cgi_args)[0].c_str()),const_cast<char *>((*cgi_args)[1].c_str()),(char *)0};
-
     int pid = fork();
 
     if(pid == 0)
