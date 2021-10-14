@@ -13,7 +13,7 @@ private:
     static int processRequests(int server_s);
     static inline int readData(int fd,char * buf,sockaddr_in & client_addr);
     static inline void clientADDR(sockaddr_in & adddr);
-    threadpool tp{16};
+    threadpool tp{4};
 public:
     static const int BUFFER_SIZE = 4096;
 

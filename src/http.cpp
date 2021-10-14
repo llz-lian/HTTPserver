@@ -1,5 +1,6 @@
 #include<http.hpp>
 #include<send.hpp>
+#include<factory.hpp>
 /*Http::Http(const string & request,const sinfo & in):info(in)
 {
     data = &request;
@@ -119,23 +120,28 @@ void Http::getBody(const string &&body)
 void Http::sendData(int fd)
 {
 	shared_ptr<SendHttp> send;
-    //SendHttp * send;
 	shared_ptr<Http> this_http = getThis();
+	try{
+		send = Factory::get().produce_shared(method);
+		send->init(this_http,fd);
+	}catch(string &s)
+	{
+		send = make_shared<Get>(Get(this_http,fd));
+	}
+	send->sendData();
+	/*
+
     if(method=="GET")
     {
 		send = make_shared<Get>(Get(this_http,fd));
-        //send = new Get(this,fd);//add thread
     }
 	else if(method=="POST")
 	{
 		send = make_shared<Post>(Post(this_http,fd));
-		//send = new Post(this,fd);
 	}else{
 		send = make_shared<Get>(Get(this_http,fd));
-		//send = new Get(this,fd);
 	}
-	send->sendData();
-	//delete send;
+	send->sendData();*/
 }
 
 void Http::show() const

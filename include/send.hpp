@@ -8,11 +8,14 @@ private:
     shared_ptr<Http> http;
     
     string file_name;
-    
 public:
     int clientfd;
     friend shared_ptr<vector<string>>  getUri(shared_ptr<Http> http,string & file_name);
     virtual int sendData()=0;
+    SendHttp(string name = "./pages")
+    {
+        file_name = name;
+    }
     SendHttp(shared_ptr<Http> http,int clientfd,string name = "./pages")
     {
         this->clientfd = clientfd;
@@ -49,6 +52,13 @@ public:
         return http->header;
     };
 
+    virtual inline void init(shared_ptr<Http> http,int clientfd)
+    {
+        this->http = http;
+        this->clientfd = clientfd;
+    }
+
+
     inline void showInfo() const{
         http->showInfo();
     }
@@ -65,8 +75,12 @@ private:
     void dynamicGet(int fd,const char * file_name);
 public:
     virtual int sendData();
+    Get(){};
     Get(shared_ptr<Http> http,int fd);
     virtual ~Get();
+    virtual inline void init(shared_ptr<Http> http,int fd){
+        *this = Get(http,fd);
+    };
 };
 
 
@@ -77,7 +91,12 @@ private:
     const string * post_body;
     struct stat status;
 public:
+    Post(){};
     Post(shared_ptr<Http> http,int fd);
+
+    virtual inline void init(shared_ptr<Http> http,int fd){
+        *this = Post(http,fd);
+    }
     virtual int sendData();
     virtual ~Post(){};
 };

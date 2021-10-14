@@ -21,6 +21,7 @@
 #include<iostream>
 #include<sstream>
 #include<thread>
+#include<functional>
 
 #include <memory>
 #include"threadpool.hpp"

@@ -1,7 +1,6 @@
 #pragma once
-#include <send.hpp>
-#include <string>
-#include <functional>
+#include"head.hpp"
+#include "send.hpp"
 using namespace std;
 class Factory{
 public:
@@ -10,7 +9,7 @@ public:
     {
         register_(const string & s)
         {
-            Factory::get().map_.emplace(s,[]{return new T();});
+            Factory::get().map_.emplace(s,&register_<T>::create);
         }
         /* data */
         template<class ...Args>
@@ -18,34 +17,35 @@ public:
         {
             Factory::get().map_.emplace(t,[&]{return new T(args...);});
         }
+        inline static SendHttp * create(){return new T;};
     };
-    static SendHttp* getSender(const string & s)
+    SendHttp* getSender(const string & s)
     {
         if(map_.find(s)==map_.end())
             throw "no such method\n";
-        return Factory::get().map_[s]();
+        return map_[s]();
     }
-    static std::shared_ptr<SendHttp> produce_shared(const std::string& key)
+    std::shared_ptr<SendHttp> produce_shared(const std::string& key)
     {
-        auto & a = map_;
         return std::shared_ptr<SendHttp>(getSender(key));
+    }
+    inline static Factory & get()
+    {
+        static Factory fac;
+        return fac;
     }
 private:
     Factory(){};
     ~Factory(){};
 
-    static Factory & get()
-    {
-        static Factory fac;
-        return fac;
-    }
 
     Factory(const Factory &) = delete;
     Factory(Factory &&) = delete;
-    static map<string,function<SendHttp* ()>> map_;
+
+    
+    map<string,function<SendHttp* ()>> map_;
 };
 
-map<string,function<SendHttp* ()>> Factory::map_;
 inline void registSender()
 {
     Factory::register_<Get>("GET");

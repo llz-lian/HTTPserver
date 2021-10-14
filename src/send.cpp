@@ -1,5 +1,6 @@
 #include<send.hpp>
 #include<string>
+
 Get::Get(shared_ptr<Http> http,int fd):SendHttp(http,fd)
 {
     try
@@ -17,9 +18,9 @@ Get::Get(shared_ptr<Http> http,int fd):SendHttp(http,fd)
         }
     }
     catch(const std::string& e)
-    {
-        showInfo();
+    {        
         std::cerr << e << '\n';
+        showInfo();
         status.st_size = 0;
         sendBad(fd);
     }
@@ -91,6 +92,16 @@ void Get::dynamicGet(int fd,const char * file_name)
         return;
     }
     char * send_html,file_type[MAX_LEN],buf[Server::BUFFER_SIZE];
+    char * ptr = &buf[0];
+    ptr += snprintf(ptr,sizeof(buf),"HTTP/1.1 200 OK\r\n");
+    ptr += snprintf(ptr,sizeof(buf),"%sServer:my web server\r\n",buf);
+
+    if(sendHead(clientfd,buf)<0)
+    {
+        perror("<Get::dynamicGet>sendHead");
+        return;
+    }
+
     char * list[] = {const_cast<char *>((*cgi_args)[0].c_str()),const_cast<char *>((*cgi_args)[1].c_str()),(char *)0};
     int pid = fork();
 
@@ -142,8 +153,11 @@ int Post::sendData()
     if(status.st_size<=0)
         return -1;
     char buf[Server::BUFFER_SIZE];
-    sprintf(buf, "HTTP/1.1 200 OK\r\n"); 
-    sprintf(buf,"%sServer:my web server\r\n",buf);
+    char * ptr = &buf[0];
+    //sprintf(buf, "HTTP/1.1 200 OK\r\n"); 
+    ptr += snprintf(ptr,sizeof(buf),"HTTP/1.1 200 OK\r\n");
+    ptr += snprintf(ptr,sizeof(buf),"%sServer:my web server\r\n",buf);
+
     if(sendHead(clientfd,buf)<0)
     {
         perror("<Post::sendData>sendHead");
@@ -205,11 +219,5 @@ int Post::sendData()
         close(pipes[1]);
 
     }
-
-
-
-    //char * list[] = {const_cast<char *>((*cgi_args)[0].c_str()),const_cast<char *>(post_body->c_str()),nullptr};
-
-
     return 0;
 }

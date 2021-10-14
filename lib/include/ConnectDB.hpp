@@ -39,7 +39,7 @@ private:
     auto getInsertData(const T & t,const Args & ...args)->decltype(t.insertDB())
     {
         string ret = "";
-        ret += t.insertDB();
+        ret += t.insertDB();//类里实现string insertDB();
         ret += getInsertData(args...);
         return ret;
     }
@@ -59,7 +59,8 @@ public:
 
     template <class ...Args>
     void insertData(string & table,const Args & ...args){
-
+        //table 插入的表
+        //args  插入的类
         string sql = "insert into " + table;
         sql += getInsertData(args...);
         res = doSql(sql.c_str(),sql.length());

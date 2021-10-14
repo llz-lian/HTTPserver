@@ -44,5 +44,3 @@ int readFile(const char * file_name,char * buff,int len)
     fclose(fp);
     return 0;
 }
-
-

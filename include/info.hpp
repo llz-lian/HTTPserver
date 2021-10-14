@@ -20,4 +20,12 @@ public:
         cout<<"@thread id:"<<tid<<endl<<"ip:"<<ip<<endl<<"port:"<<port<<endl;
         cout<<"url:"<<url<<endl;
     }
+    inline string ToString()
+    {
+        return "";
+    }
+};
+
+class InfoFormatter{
+
 };

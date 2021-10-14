@@ -1,7 +1,6 @@
 #include<server.hpp>
 #include<http.hpp>
-
-
+#include"factory.hpp"
 Server::Server()
 {
     int sin_size = sizeof(sockaddr);
@@ -32,6 +31,7 @@ Server::Server()
         exit(1);
     }
     printf("http now listening.\n");
+    registSender();
 }
 Server::~Server()
 {

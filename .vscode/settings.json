@@ -1,0 +1,11 @@
+{
+    "cmake.configureOnOpen": false,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "C_Cpp.default.browse.path": [
+        "/home/llz/code/HTTPserver/include"
+    ],
+    "C_Cpp.default.includePath": [
+        "/home/llz/code/HTTPserver/include"
+    ],
+    "C_Cpp.default.cppStandard": "c++17"
+}
