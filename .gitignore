@@ -3,5 +3,7 @@
 /build/CMakeFiles
 /build/src
 /lib/build
+/lib/build/CMakeFiles
+/lib/build/src
 #bin files
 /bin

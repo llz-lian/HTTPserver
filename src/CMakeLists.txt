@@ -6,6 +6,9 @@ find_package (Threads)
 
 INCLUDE_DIRECTORIES(
 ../include
+../include/aux
+../include/server
+../include/log
 )
 
 link_directories(../lib/libsql1.a)

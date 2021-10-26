@@ -9,7 +9,7 @@ include_directories(
 
 link_directories(/usr/lib/x86_64-linux-gnu)
 
-add_library(sql_static STATIC ${SRC_LIST})
+add_library(sql_static STATIC "./src/db.cpp")
 
 target_link_libraries (sql_static /usr/lib/x86_64-linux-gnu/libmysqlclient.so)
 

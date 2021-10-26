@@ -1,6 +1,7 @@
 #include<server.hpp>
 #include<http.hpp>
-#include"factory.hpp"
+#include"./aux/factory.hpp"
+
 Server::Server()
 {
     int sin_size = sizeof(sockaddr);
