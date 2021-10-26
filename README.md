@@ -39,5 +39,5 @@ $ make
 WSL1的UBUNTU20.04运行
 ```
 $ cd {PROJECT_SOURCE_DIR}/bin
-$ ./server
+$ ./mywebserver
 ```
