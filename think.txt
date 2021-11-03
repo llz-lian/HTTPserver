@@ -1,0 +1,76 @@
+epoll>>http>>event>basemanage
+
+server<--epoll
+^        ^
+|        |  
+config   |          
+         |                
+       manage<--events<--stuff  (fd,status)*n
+       |timermanage  (fd,timer)*1
+       |eventmanage  (fd,handle)*n
+timermanage<--timer
+
+event{
+    fd
+    timer &
+    handle &
+}
+thrx->doxx
+c-->s-->e.happen(f)-->ma.reg(xxx,xxx,xxx)-->ma.do(xxx,xxx)-->ma.end(timer start)
+
+
+fd = accpet(fd)
+    event(fd);
+    Epoll.addepoll(event){
+        ...
+        dohandle(evnet);
+    };
+
+
+    dohandle(event){
+        event.startRecord();
+
+        switch(event.getStatus)
+        {
+            handle();
+        }
+        ...
+        ...
+        ...
+    }
+
+    handle(){
+        readData(WAIT_READ){
+            event.changeStatus()//reading
+            ...
+            read();
+            ...
+            event.changeStatus();//WAIT_WRITE
+            return;
+        }
+        writeData(WAIT_WRITE){
+            event.changeStatus();//writing
+            ...
+            write();
+            ...
+            ...
+            event.changeStatus();//WAIT_READ
+            return;
+        }
+        excpet(){
+            event.changeStatus();//error
+            ...
+            write();
+            ...
+            event.changeStatus();//timeout
+            return;
+        }
+        clearEvnet(){
+            ~event();
+        }
+    }
+    ~event(){
+        close(fd);
+        ...
+        ...
+    }

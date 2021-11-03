@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../libsql1.a  CMakeFiles/sql_static.dir/src/db.cpp.o
-/usr/bin/ranlib ../libsql1.a
