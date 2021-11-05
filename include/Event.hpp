@@ -1,4 +1,5 @@
 #include <atomic>
+#include <mutex>
 #include "StaticNums.hpp"
 #include "Timer.hpp"
 class Timer;
@@ -8,7 +9,10 @@ namespace EVENT{
             READING,
             WAIT_WRITE,
             WRITEING,
+            WRITE_OVER,
             TIME_OUT,
+            READ_ERROR,
+            WRITE_ERROR,
             ERROR
         };
     class BaseEvent
@@ -22,6 +26,8 @@ namespace EVENT{
         inline int getFd()const {return fd;};
         BaseEvent(int fd):fd(fd){};
         virtual ~BaseEvent();
+        std::mutex mtx;
+
     };
     class Event: public BaseEvent
     {
@@ -32,7 +38,7 @@ namespace EVENT{
     public:
         Event(int fd):BaseEvent(fd){};
         virtual ~Event(){};
-        void startRecord(){
+        void startRecord(int eventfd){
             if(stop==false)
             {
                 //重复调用
@@ -43,7 +49,9 @@ namespace EVENT{
                 /*
                     互斥条件
                 */
-               this->changeStatus(TIME_OUT);
+                std::lock_guard lock(mtx);
+                this->changeStatus(TIME_OUT);
+               //awake(eventfd)
             };
             wait_time.setTimeOut(timeout,NUMS::MAX_WAIT_TIME);
         };//开始计时

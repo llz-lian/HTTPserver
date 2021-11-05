@@ -2,31 +2,37 @@
 #include <map>
 #include <functional>
 #include <memory>
-
+#include <sys/epoll.h>
 #include "threadpool.hpp"
 #include "Event.hpp"
 #include "Handle.hpp"
-
-namespace Epoll{
+//也可以是一个Event,感觉没必要
+namespace NEpoll{
     using namespace std;
-    using Event = shared_ptr<EVENT::Event>;
-    using SEvent = shared_ptr<EVENT::SEvent>;
-
-    using BaseE = shared_ptr<EVENT::BaseEvent>;
     class Epoll{
     private:
-        unordered_map<BaseE,handle> todo;//fd <-> handle
-        Epoll(const Epoll &e) = delete;
-        int server_fd;
-        bool active = true;
 
-        threadpool tp;
-        void handleIn();
-        void addFd(int fd);
-        void removeFD(int fd);//while(active){sleep(MAX_WAIT_TIME);reomve(fd)}
+        Epoll(const Epoll &e) = delete;
+        int epoll_fd;
+        bool active = true;
+        epoll_event ev;
+        bool ctl(int flags,int fd);
     public:
+        inline int getFd()const{
+            return epoll_fd;
+        };
+        void addFd(int fd){
+            if(!ctl(EPOLL_CTL_ADD,fd))
+            {
+                perror("<Epoll::addFd> ctl error");
+                exit(1);
+            }
+        };
+        void removeFD(int fd);//while(active){sleep(MAX_WAIT_TIME);reomve(fd)}
+        void modFd(int flags,int fd){
+            
+        };
         Epoll();
         ~Epoll();
-        void startLoop();
     };
 }

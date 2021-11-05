@@ -1,76 +1,74 @@
-epoll>>http>>event>basemanage
 
-server<--epoll
-^        ^
-|        |  
-config   |          
-         |                
-       manage<--events<--stuff  (fd,status)*n
-       |timermanage  (fd,timer)*1
-       |eventmanage  (fd,handle)*n
-timermanage<--timer
-
-event{
-    fd
-    timer &
-    handle &
+main
+init(){
+    factory.regist()
+    poll.init()
 }
-thrx->doxx
-c-->s-->e.happen(f)-->ma.reg(xxx,xxx,xxx)-->ma.do(xxx,xxx)-->ma.end(timer start)
+poll //server fd
+accpet(){
+    buff = read(serverfd)
+    obj = createobj(buff)
+    sub = choosesub()
+    sub.get(event,eventfd_event,obj)
+    sub.awake()
+} read->  obj and event eventfd_event ->choose and add sub.poll->eventfd
+creatobj()
+createEvent()
+choose()
+addtosub()
+//add_subs and add_threads or remove
+awake(){
+    eventfd//可以不执行
+}
+p_queue<sub> subs
+threadpool(subs.start())
+threadpool(accpet)
+--------------------------------------
 
 
-fd = accpet(fd)
-    event(fd);
-    Epoll.addepoll(event){
-        ...
-        dohandle(evnet);
-    };
-
-
-    dohandle(event){
-        event.startRecord();
-
-        switch(event.getStatus)
-        {
-            handle();
-        }
-        ...
-        ...
-        ...
+sub
+start()
+{
+    while(true)
+    {
+        fds = waitpoll()
+        for(fd:fds)
+            threadpool + core.doit(obj,events[fd])
     }
+}
+obj&
+events[maxfd]//vector<event>
+awake(){
+    //加锁
+    write(eventfd)
+}
+<class e...>
+get(evnet...,obj &){
 
-    handle(){
-        readData(WAIT_READ){
-            event.changeStatus()//reading
-            ...
-            read();
-            ...
-            event.changeStatus();//WAIT_WRITE
-            return;
-        }
-        writeData(WAIT_WRITE){
-            event.changeStatus();//writing
-            ...
-            write();
-            ...
-            ...
-            event.changeStatus();//WAIT_READ
-            return;
-        }
-        excpet(){
-            event.changeStatus();//error
-            ...
-            write();
-            ...
-            event.changeStatus();//timeout
-            return;
-        }
-        clearEvnet(){
-            ~event();
-        }
+}
+poll
+threadpool(doit)
+core
+doit(event&,obj&){
+    event.lock()
+    while(over)
+    {
+        dowhat = factory[event.status];
+        dowhat!=nullptr
+        dowhat(obj);
     }
-    ~event(){
-        close(fd);
-        ...
-        ...
-    }
+}
+
+-------------------------------------------------
+factory
+regist()
+get()
+op[]
+map<status,handle>
+
+--------------------------------------------------
+
+obj
+status//4xx 2xx
+head
+body
