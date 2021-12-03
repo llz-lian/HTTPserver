@@ -1,124 +1,43 @@
-#include <atomic>
-#include <mutex>
+#pragma once
+#include <chrono>
+#include "memory"
+#include "Http.hpp"
 #include "StaticNums.hpp"
-#include "Timer.hpp"
-class Timer;
-namespace EVENT{
-    enum{
-            WAIT_READ,
-            READING,
-            WAIT_WRITE,
-            WRITEING,
-            WRITE_OVER,
-            TIME_OUT,
-            READ_ERROR,
-            WRITE_ERROR,
-            ERROR
-        };
-    class BaseEvent
+namespace NEvent{
+    enum STATUS{
+        WAITREAD,
+        WAITSEND,
+        TIMEOUT,
+        ERR
+    };
+    enum ERRNUM{
+        READ_ERR,
+        WRITE_ERR,
+        HTTP_ERR
+    };
+    using namespace std;
+    class Event
     {
-    private:
-        int fd;//文件描述符
-        std::atomic_uint status = WAIT_READ;//状态
     public:
-        unsigned int getStatus() const{return status;};
-        void changeStatus(unsigned int status){this->status = status;};//叫set也行
-        inline int getFd()const {return fd;};
-        BaseEvent(int fd):fd(fd){};
-        virtual ~BaseEvent();
-        std::mutex mtx;
+        void updateTime();
+        shared_ptr<NHTTP::Http> http;
+        Event(int fd);
+        ~Event();
+        inline uint getStatus() const{return status;};
+        inline int getFd() const{return fd;};
+        inline void changeStatus(uint status){this->status = status;};
+        inline void setErr(uint ERR){err = ERR;};
 
-    };
-    class Event: public BaseEvent
-    {
+        bool timeOut(){
+            return pre_to_now.count()>=NUMS::TIME_OUT;
+        }
     private:
-        Timer wait_time; //等待
-        bool stop = true;//是否开始计时
-        //并发处理 status
-    public:
-        Event(int fd):BaseEvent(fd){};
-        virtual ~Event(){};
-        void startRecord(int eventfd){
-            if(stop==false)
-            {
-                //重复调用
-                return;
-            }
-            stop = false;
-            auto timeout = [this]{
-                /*
-                    互斥条件
-                */
-                std::lock_guard lock(mtx);
-                this->changeStatus(TIME_OUT);
-               //awake(eventfd)
-            };
-            wait_time.setTimeOut(timeout,NUMS::MAX_WAIT_TIME);
-        };//开始计时
+        chrono::steady_clock::time_point now_time;
+        chrono::steady_clock::time_point start_time;
+        chrono::steady_clock::duration pre_to_now;
+
+        int fd;
+        uint status;
+        uint err;
     };
-    
-    class SEvent: public BaseEvent
-    {
-    private:
-    public:
-        SEvent(int fd):BaseEvent(fd){};
-        virtual ~SEvent(){};
-    };
-}
-/*
-    fd = accpet(fd)
-    event(fd);
-    Epoll.addepoll(event){
-        ...
-        dohandle(evnet);
-    };
-
-
-    dohandle(event){
-        event.startRecord();
-
-        switch(event.getStatus)
-        {
-            handle();
-        }
-        ...
-        ...
-        ...
-    }
-
-    handle(){
-        readData(WAIT_READ){
-            event.changeStatus()//reading
-            ...
-            read();
-            ...
-            event.changeStatus();//WAIT_WRITE
-            return;
-        }
-        writeData(WAIT_WRITE){
-            event.changeStatus();//writing
-            ...
-            write();
-            ...
-            ...
-            event.changeStatus();//WAIT_READ
-            return;
-        }
-        excpet(){
-            event.changeStatus();//error
-            ...
-            write();
-            ...
-            event.changeStatus();//timeout
-            return;
-        }
-        clearEvnet(){
-            ~event();
-        }
-    }
-    ~event(){
-        close(fd);
-        ...
-        ...
-    }
-*/
+};

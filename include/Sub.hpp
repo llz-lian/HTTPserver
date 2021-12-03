@@ -1,48 +1,28 @@
-#pragma once
+#include <map>
 #include <vector>
-#include "Event.hpp"
-#include "threadpool.hpp"
+
 #include "Epoll.hpp"
-#include "StaticNums.hpp"
-#include "Http.hpp"
-namespace NSub{
-using namespace std;
-using PEvent = shared_ptr<EVENT::Event>;
-class Core{
-private:
-    HTTP::Http http;
-public:
-    void doit(PEvent & event)
-    {
-        
-    }
-    Core(string & request):http(request){
-    };
-};
-
-
-class Sub
+#include "threadpool.hpp"
+#include "Event.hpp"
+namespace NSub
 {
-private:
-    /* data */
-    vector<PEvent> events;
-    epoll_event evs[NUMS::MAX_EVENTS];
-    int wake_fd;
+    using namespace std;
+    class Sub
+    {
+    public:
+        Sub();
+        ~Sub();
+        void start();
+        NEpoll::Epoll ep;
+    private:
+        const int MAX_FD = 300;
+        threadpool doit;
+        vector<epoll_event> ep_events;
+        map<int,NEvent::Event *> map;
 
-    threadpool to_doit;
-    NEpoll::Epoll ep;
-public:
-    Sub(/* args */);
-    void start();
-    void awake();
-    inline void addEvents(PEvent & event){
-        events[event->getFd()] = event;
+        void removeEvent();
+        void addMap(int fd);
+        int addSubDo();
+        void processing(NEvent::Event &ev,uint flags);
     };
-    inline int getWakeFd()const{
-        return wake_fd;
-    };
-
-    ~Sub();
-};
-
 }

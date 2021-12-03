@@ -6,33 +6,57 @@
 #include "threadpool.hpp"
 #include "Event.hpp"
 #include "Handle.hpp"
-//也可以是一个Event,感觉没必要
 namespace NEpoll{
     using namespace std;
     class Epoll{
+    //负责处理epoll等待的文件描述符
     private:
 
         Epoll(const Epoll &e) = delete;
         int epoll_fd;
+        int num_wait_fd = 0;
+        
         bool active = true;
+
+        bool ctl(int ctl_flag,epoll_event & e,int fd);
+
+        int MAX_FD;
+
         epoll_event ev;
-        bool ctl(int flags,int fd);
     public:
         inline int getFd()const{
             return epoll_fd;
         };
-        void addFd(int fd){
-            if(!ctl(EPOLL_CTL_ADD,fd))
+        inline bool addFd(int fd){
+            if(num_wait_fd==MAX_FD)
+                return false;
+            ev.events = EPOLLIN|EPOLLOUT|EPOLLRDHUP|EPOLLET;
+            if(!ctl(EPOLL_CTL_ADD,ev,fd))
             {
-                perror("<Epoll::addFd> ctl error");
-                exit(1);
+                //error
+                return false;
+            }
+            ++num_wait_fd;
+            return true;
+        };
+        inline void removeFD(int fd)
+        {
+            ctl(EPOLL_CTL_DEL,ev,fd);
+            num_wait_fd--;
+        };
+        inline void modFd(int flags,int fd){
+            ev.events = flags;
+            if(!ctl(EPOLL_CTL_MOD,ev,fd))
+            {
+
             }
         };
-        void removeFD(int fd);//while(active){sleep(MAX_WAIT_TIME);reomve(fd)}
-        void modFd(int flags,int fd){
-            
-        };
-        Epoll();
+
+        inline int wait(vector<epoll_event> &events){
+            return epoll_wait(epoll_fd,(epoll_event*)&events,events.size(),300);
+        }
+
+        Epoll(int max_fd);
         ~Epoll();
     };
 }

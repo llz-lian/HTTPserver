@@ -6,46 +6,39 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <string.h>
 
 #include "Event.hpp"
 #include "Handle.hpp"
 #include "StaticNums.hpp"
 using namespace std;
-using PEvent = shared_ptr<EVENT::Event>;
+using PEvent = shared_ptr<NEvent::Event>;
 
-int readData(PEvent & ev,char * buf,sockaddr_in & client_addr)
+void readData(Event::Event & ev,char * buf)
 {
-    int fd = ev->getFd();
-    ev->changeStatus(EVENT::READING);
-    size_t size=sizeof(struct sockaddr);
-    int clientfd = accept(fd,(sockaddr*)&client_addr,(socklen_t*)&size);
-    if(clientfd<0)
+    int fd = ev.getFd();
+    int read_num = 0;
+    while ((read_num = read(fd,buf,sizeof(buf)))>0)
     {
-        perror("<Server::readData>accept client error");
-        ev->changeStatus(EVENT::READ_ERROR);
-        return -1;
+        /* code */
     }
-    int read_num = read(clientfd,buf,NUMS::MAX_BUFF);
     if(read_num<0)
     {
-        if(errno == EINTR)
-            read_num = 0;
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return;
         else
         {
-            ev->changeStatus(EVENT::READ_ERROR);
-            return -1;
+            ev.changeStatus(NEvent::STATUS::ERR);
+            return;
         }
     }
-    ev->changeStatus(EVENT::WAIT_WRITE);
-    return clientfd;
+    ev.changeStatus(NEvent::STATUS::WAITSEND);
 }
 
 
 int writeFd(PEvent & ev,const char * buff,size_t len)
 {
     int fd = ev->getFd();
-    ev->changeStatus(EVENT::WRITEING);
     ssize_t written;
     size_t n = len;
     while(len>0)
@@ -53,7 +46,7 @@ int writeFd(PEvent & ev,const char * buff,size_t len)
         if((written = write(fd,buff,len))<=0)
         {
             perror("<writeFd>write err");
-            ev->changeStatus(EVENT::WRITE_ERROR);
+            ev->changeStatus(NEvent::STATUS::ERR);
             if(errno == EINTR)
                 written = 0;
             else
@@ -62,7 +55,7 @@ int writeFd(PEvent & ev,const char * buff,size_t len)
         len -= written;
         buff += written;
     }
-    ev->changeStatus(EVENT::WRITE_OVER);
+    ev->changeStatus(NEvent::STATUS::WAITREAD);
     return n;
 }
 void getFileType(const char * file_name,char * file_type)

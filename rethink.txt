@@ -1,0 +1,80 @@
+Epoll
+
+
+
+
+Event{
+    Time start;
+    Time now;
+    dur spend = now - start;
+
+    shared_ptr<http> http;
+    int fd;
+    uint status;
+
+    void timeOut();
+}
+
+Server{
+    int listen_fd;
+    Epoll ep;
+    threadpool addsub;
+    vector<Sub> subs;
+    int sub_num;
+    int next_sub = 0;
+    bool addTosub(int fd);
+
+
+    void accept();
+    void start();
+}
+
+Sub{
+    int fd_nums;
+    const int max_fd = 100;
+    threadpool doit;
+    Epoll ep;
+    vector<epoll_event> epev;
+    map<fd,Event*> map;
+
+    void addMap(int fd);
+    void addsubDo(){
+        while(true)
+        {
+            list = ep.wait(epev);
+            for(item:list)
+            {
+                addMap(item.ev.fd);
+                doit.append([&]{
+                    processing(map[fd],item.events);
+                })
+            }
+        }
+    };
+    processing(Event & ev,uint flags)
+    {
+        char buf[2048];
+        if(ev.status==timeOut||flags&(EPOLLRDHUP|EPOLLERR))
+        {
+            erase(ev);
+            return;
+        }
+        if(ev.status==waitread&&flags&(EPOLLIN))
+        {
+            ev.time();
+            ev.http.init(read());
+        }
+        if(ev.status==waitsend)
+        {
+            ev.http->senddata();
+            ev.time();
+        }
+        if(ev.status==ERR)
+        {
+            erase(ev);
+            return;
+        }
+    }
+
+}
+

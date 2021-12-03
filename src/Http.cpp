@@ -7,7 +7,7 @@
     pos = 0;
 
 }*/
-using namespace HTTP;
+using namespace NHTTP;
 Http::Http(const string & request)
 {
     data = &request;
@@ -138,27 +138,41 @@ void Http::show() const
     cout<<body<<endl;
 }
 
+void Http::sendData(int fd)
+{
+	shared_ptr<NSend::SendHttp> send;
+	shared_ptr<Http> this_http = getThis();
+	try{
+		send = Factory::get().produce_shared(method);
+		send->init(this_http,fd);
+	}catch(string &s)
+	{
+		send = make_shared<NSend::Get>(NSend::Get(this_http,fd));
+	}
+	send->sendData();
+}
 
 shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name)
 {
     // /index.html  /home.html /{}/x.html
-		
+	
+	const string & url = http->getUrl();
 	shared_ptr<vector<string>> args = make_shared<vector<string>>();
 	if(http==nullptr)
 		return args;
     //vector<string> * args = new vector<string>;
-    if(http->url.find("cgi-bin")== string::npos)//not cgi
+    if(url.find("cgi-bin")== string::npos)//not cgi
     {
-        if(http->url=="/")
+        if(url=="/")
         {
             file_name += "/home.html";
         }else{
-            file_name += http->url;
+            file_name += url;
         }   
     }else{//  /cgi-bin/x.cgi(?xxx=aaa&ooo=bbb/)
 		int arg_start = 0;
-		int url_len = http->url.size();
-		while(arg_start<url_len&&http->url[arg_start]!='?')
+		int url_len = url.size();
+		while(arg_start<url_len&&url[arg_start]!='?')
 		{
 			++arg_start;//   ?xxx=aaa&ooo=bbb
 		}
@@ -166,12 +180,12 @@ shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name)
 		{
 			//cout<<"<getUri>bad url"<<endl;
 			//throw string("<getUri>bad url");
-			args->push_back(file_name + http->url);
+			args->push_back(file_name + url);
 			args->push_back("");
 			return args;
 		}
-		args->push_back(file_name + http->url);  // cgi_name   /pages/cgi-bin/xxx.cgi
-		args->push_back(http->url.substr(arg_start,url_len - arg_start));    // args
+		args->push_back(file_name + url);  // cgi_name   /pages/cgi-bin/xxx.cgi
+		args->push_back(url.substr(arg_start,url_len - arg_start));    // args
     }
     return args;
 }
