@@ -4,15 +4,20 @@
 #include <vector>
 #include <map>
 #include <sstream>
+#include <iostream>
 #include "Send.hpp"
 #include "factory.hpp"
-
 using namespace std;
-class Http;
 //vector<string> *  getUri(const Http * http,string & file_name);
+class Http;
 shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name);
+
+namespace NSend{
+    class SendHttp;
+};
 class Http:public enable_shared_from_this<Http>
 {
+    friend class NSend::SendHttp;
 private:
     /* data */
     const string * data;//请求报文整体
@@ -29,8 +34,6 @@ private:
     void getBody(const string &&body);//得到请求本体
 public:
     //friend vector<string> *  getUri(const Http * http,string & file_name);
-    shared_ptr<vector<string>> getUri(shared_ptr<Http> http,string & file_name);
-    friend class NSend::SendHttp;
     void show() const;
     const string * postData(){
         return body;
@@ -43,8 +46,9 @@ public:
         return url;
     }    
     void sendData(int fd);
-    void init();
+    void init(const string & request);
     Http(const string & request);
+    Http(){};
     ~Http();
 };
 

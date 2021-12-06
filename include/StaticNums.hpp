@@ -1,7 +1,7 @@
 #pragma once
 namespace NUMS{
     enum{
-        PORT = 80,
+        PORT = 8888,
         MAX_BUFF = 1024,
         MAX_WAIT_TIME = 500,
         MAX_FD = 1024,

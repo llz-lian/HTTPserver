@@ -2,29 +2,29 @@
 
 NSub::Sub::Sub():ep(MAX_FD)
 {
-    ep_events.resize(MAX_FD);
+    ep_events = new epoll_event[MAX_FD];
 };
 
 void NSub::Sub::addMap(int fd)
 {
     if(fd<0)
         return;
-    map[fd] = new Event::Event(fd);
+    fd_map[fd] = new NEvent::Event(fd);
 }
 
 int NSub::Sub::addSubDo()
 {
-    int num = ep.wait(ep_events);
+    int num = ep.wait(ep_events,-1);
     for(int i = 0;i<num;i++)
     {
         int fd = ep_events[i].data.fd;
         int event = ep_events[i].events;
-        if(map.find(fd)==map.end())
+        if(fd_map.find(fd)==fd_map.end())
         {
             addMap(fd);
         }
         doit.commit([&]{
-            processing(*map[fd],event);
+            processing(*fd_map[fd],event);
         });
     }
     return num!=0;
@@ -40,13 +40,17 @@ void NSub::Sub::processing(NEvent::Event & ev,uint flags)
     else if(ev.getStatus()==NEvent::STATUS::WAITREAD&&(flags&EPOLLIN))
     {
         ev.updateTime();
-        readData(ev,buf);
+        int ret = readData(ev.getFd(),buf);
+        if(ret < 0)
+        {
+            ev.changeStatus(NEvent::STATUS::ERR);
+        }
         if(ev.getStatus()==NEvent::STATUS::ERR)
         {
             ev.setErr(NEvent::ERRNUM::READ_ERR);
             return;
         }
-        ev.http->init();
+        ev.http->init(buf);
     }
     else if(ev.getStatus()==NEvent::STATUS::WAITSEND)
     {
@@ -57,19 +61,19 @@ void NSub::Sub::processing(NEvent::Event & ev,uint flags)
     {
         //log
         ep.removeFD(ev.getFd());
-        map[ev.getFd()] = nullptr;
+        fd_map[ev.getFd()] = nullptr;
         delete &ev;
     }
 }
 
 void NSub::Sub::removeEvent()
 {
-    for(auto & [fd,ev]:map)
+    for(auto & [fd,ev]:fd_map)
     {
         if(ev->timeOut())
         {
             ep.removeFD(ev->getFd());
-            map[ev->getFd()] = nullptr;
+            fd_map[ev->getFd()] = nullptr;
             delete &ev;
         }
     }

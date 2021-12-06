@@ -7,8 +7,10 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/llz/code/HTTPserver/src/Epoll.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Epoll.cpp.o"
   "/home/llz/code/HTTPserver/src/Handle.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Handle.cpp.o"
   "/home/llz/code/HTTPserver/src/Http.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Http.cpp.o"
+  "/home/llz/code/HTTPserver/src/Send.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Send.cpp.o"
   "/home/llz/code/HTTPserver/src/Server.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Server.cpp.o"
   "/home/llz/code/HTTPserver/src/Time.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/Time.cpp.o"
+  "/home/llz/code/HTTPserver/src/main.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/main.cpp.o"
   "/home/llz/code/HTTPserver/src/sub.cpp" "/home/llz/code/HTTPserver/build/src/CMakeFiles/mywebserver.dir/sub.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

@@ -17,8 +17,11 @@ namespace NSub
     private:
         const int MAX_FD = 300;
         threadpool doit;
-        vector<epoll_event> ep_events;
-        map<int,NEvent::Event *> map;
+        //vector<epoll_event> ep_events;
+
+        epoll_event * ep_events;
+
+        map<int,NEvent::Event *> fd_map;
 
         void removeEvent();
         void addMap(int fd);

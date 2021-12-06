@@ -47,8 +47,6 @@ int getListenfd(sockaddr_in & addr)
     memset(&(addr.sin_zero),0,sizeof(addr.sin_zero));
 
     setsockopt(sockfd,SOL_SOCKET,SO_REUSEADDR,&i,sizeof(i));
-    setNonBlockfd(sockfd);
-
     //bind
     if(bind(sockfd,(sockaddr*)&addr,sizeof(sockaddr))<0)
     {
@@ -63,5 +61,7 @@ int getListenfd(sockaddr_in & addr)
         exit(1);
     }
     printf("http now listening.\n");
+    setNonBlockfd(sockfd);
+
     return sockfd;
 };

@@ -18,14 +18,15 @@ namespace NEpoll{
         
         bool active = true;
 
-        bool ctl(int ctl_flag,epoll_event & e,int fd);
-
         int MAX_FD;
 
         epoll_event ev;
     public:
         inline int getFd()const{
             return epoll_fd;
+        };
+        bool ctl(int ctl_flag,epoll_event & e,int fd){
+            return epoll_ctl(epoll_fd,ctl_flag,fd,&e)==0;
         };
         inline bool addFd(int fd){
             if(num_wait_fd==MAX_FD)
@@ -56,7 +57,19 @@ namespace NEpoll{
             return epoll_wait(epoll_fd,(epoll_event*)&events,events.size(),300);
         }
 
-        Epoll(int max_fd);
-        ~Epoll();
+        inline int wait(epoll_event* events,int time_out = 3000)
+        {
+            return epoll_wait(epoll_fd,events,MAX_FD,time_out);
+        }
+
+        Epoll(int max_fd):MAX_FD(max_fd)
+        {
+            epoll_fd = epoll_create1(0);
+            if(epoll_fd<=0)
+            {
+                //err
+            }
+        };
+        ~Epoll(){};
     };
 }

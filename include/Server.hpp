@@ -15,7 +15,7 @@ namespace NServer{
         int listen_fd;
         NEpoll::Epoll ep;
         threadpool addsub;
-        vector<NSub::Sub> subs;
+        vector<NSub::Sub *> subs;
 
         sockaddr_in addr;
         int sub_num;

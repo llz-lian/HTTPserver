@@ -4,8 +4,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/mywebserver.dir/Epoll.cpp.o"
   "CMakeFiles/mywebserver.dir/Handle.cpp.o"
   "CMakeFiles/mywebserver.dir/Http.cpp.o"
+  "CMakeFiles/mywebserver.dir/Send.cpp.o"
   "CMakeFiles/mywebserver.dir/Server.cpp.o"
   "CMakeFiles/mywebserver.dir/Time.cpp.o"
+  "CMakeFiles/mywebserver.dir/main.cpp.o"
   "CMakeFiles/mywebserver.dir/sub.cpp.o"
 )
 

@@ -26,7 +26,7 @@ Handle.hpp
 chrono
 -
 memory
-../include/memory
+-
 Http.hpp
 ../include/Http.hpp
 StaticNums.hpp
@@ -39,10 +39,6 @@ netinet/in.h
 -
 memory
 -
-Event.hpp
-../include/Event.hpp
-Epoll.hpp
-../include/Epoll.hpp
 
 ../include/Http.hpp
 memory
@@ -54,6 +50,8 @@ vector
 map
 -
 sstream
+-
+iostream
 -
 Send.hpp
 ../include/Send.hpp
@@ -69,10 +67,10 @@ sys/stat.h
 -
 Http.hpp
 ../include/Http.hpp
-StaticNums.hpp
-../include/StaticNums.hpp
 Handle.hpp
 ../include/Handle.hpp
+StaticNums.hpp
+../include/StaticNums.hpp
 
 ../include/Server.hpp
 vector
@@ -125,6 +123,10 @@ StaticNums.hpp
 ../include/StaticNums.hpp
 
 ../include/factory.hpp
+functional
+-
+map
+-
 Send.hpp
 ../include/Send.hpp
 
@@ -148,45 +150,9 @@ functional
 iostream
 -
 
-/home/llz/code/HTTPserver/src/Epoll.cpp
-Epoll.hpp
-/home/llz/code/HTTPserver/src/Epoll.hpp
-
-/home/llz/code/HTTPserver/src/Handle.cpp
-string.h
--
-unistd.h
--
-sys/mman.h
--
-memory
--
-sys/types.h
--
-sys/stat.h
--
-fcntl.h
--
-string.h
--
-Event.hpp
-/home/llz/code/HTTPserver/src/Event.hpp
-Handle.hpp
-/home/llz/code/HTTPserver/src/Handle.hpp
-StaticNums.hpp
-/home/llz/code/HTTPserver/src/StaticNums.hpp
-
-/home/llz/code/HTTPserver/src/Http.cpp
-Http.hpp
-/home/llz/code/HTTPserver/src/Http.hpp
-
 /home/llz/code/HTTPserver/src/Server.cpp
 Server.hpp
 /home/llz/code/HTTPserver/src/Server.hpp
 Util.hpp
 /home/llz/code/HTTPserver/src/Util.hpp
-
-/home/llz/code/HTTPserver/src/sub.cpp
-Sub.hpp
-/home/llz/code/HTTPserver/src/Sub.hpp
 

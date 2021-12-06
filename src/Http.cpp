@@ -1,5 +1,6 @@
 #include "Http.hpp"
-
+#include "Send.hpp"
+using namespace std;
 /*Http::Http(const string & request,const sinfo & in):info(in)
 {
     data = &request;
@@ -7,7 +8,6 @@
     pos = 0;
 
 }*/
-using namespace NHTTP;
 Http::Http(const string & request)
 {
     data = &request;
@@ -19,6 +19,12 @@ Http::~Http()
 {
 }
 
+void Http::init(const string & request)
+{
+	data = &request;
+    paser(request);
+    pos = 0;
+}
 
 void Http::paser(const string & str)
 {

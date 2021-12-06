@@ -4,26 +4,28 @@
 #include<sys/stat.h>
 
 #include "Http.hpp"
-#include "StaticNums.hpp"
 #include "Handle.hpp"
+#include "StaticNums.hpp"
+//.cpp内实现
+class Http;
 namespace NSend{
     using namespace std;
 class SendHttp
 {
 private:
     /* data */
-    shared_ptr<Http> http;
-    
+    shared_ptr<::Http> http;
+
     string file_name;
 public:
     int clientfd;
-    friend shared_ptr<vector<string>>  getUri(shared_ptr<Http> http,string & file_name);
+    friend shared_ptr<vector<string>>  getUri(shared_ptr<::Http> http,string & file_name);
     virtual int sendData()=0;
     SendHttp(string name = "./pages")
     {
         file_name = name;
     }
-    SendHttp(shared_ptr<Http> http,int clientfd,string name = "./pages")
+    SendHttp(shared_ptr<::Http> http,int clientfd,string name = "./pages")
     {
         this->clientfd = clientfd;
         
@@ -47,24 +49,18 @@ public:
             return -1;
         }    
         return 0;
-    }
+    };
     inline string & getFileName(){
         return file_name;
-    }
-    inline string & getUrl(){
-        return http->url;
-    }
-
-    inline const map<string,string> & getMap(){
-        return http->header;
     };
 
-    virtual inline void init(shared_ptr<Http> http,int clientfd)
+    virtual inline void init(shared_ptr<::Http> http,int clientfd)
     {
         this->http = http;
         this->clientfd = clientfd;
-    }
-
+    };
+    inline string & getUrl();
+    inline const map<string,string> &getMap();
 };
 
 class Get:public SendHttp
@@ -79,9 +75,9 @@ private:
 public:
     virtual int sendData();
     Get(){};
-    Get(shared_ptr<Http> http,int fd);
-    virtual ~Get();
-    virtual inline void init(shared_ptr<Http> http,int fd){
+    Get(shared_ptr<::Http> http,int fd);
+    virtual ~Get(){};
+    virtual inline void init(shared_ptr<::Http> http,int fd){
         *this = Get(http,fd);
     };
 };
@@ -95,9 +91,9 @@ private:
     struct stat status;
 public:
     Post(){};
-    Post(shared_ptr<Http> http,int fd);
+    Post(shared_ptr<::Http> http,int fd);
 
-    virtual inline void init(shared_ptr<Http> http,int fd){
+    virtual inline void init(shared_ptr<::Http> http,int fd){
         *this = Post(http,fd);
     }
     virtual int sendData();

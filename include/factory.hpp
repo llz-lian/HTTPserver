@@ -1,6 +1,13 @@
 #pragma once
+#include <functional>
+#include <map>
 #include "Send.hpp"
 using namespace std;
+namespace NSend{
+    class SendHttp;
+    class Get;
+    class Post;
+}
 using NSend::SendHttp,NSend::Get,NSend::Post;
 class Factory{
 public:

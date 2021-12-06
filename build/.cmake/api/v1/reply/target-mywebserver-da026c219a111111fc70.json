@@ -53,7 +53,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -g -g  "
+					"fragment" : " -g  "
 				},
 				{
 					"backtrace" : 3,
@@ -75,7 +75,9 @@
 				2,
 				3,
 				4,
-				5
+				5,
+				6,
+				7
 			]
 		}
 	],
@@ -85,7 +87,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-g -g",
+				"fragment" : "-g",
 				"role" : "flags"
 			},
 			{
@@ -117,7 +119,9 @@
 				2,
 				3,
 				4,
-				5
+				5,
+				6,
+				7
 			]
 		}
 	],
@@ -144,6 +148,12 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
+			"path" : "src/Send.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
 			"path" : "src/Server.cpp",
 			"sourceGroupIndex" : 0
 		},
@@ -151,6 +161,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "src/Time.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/main.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

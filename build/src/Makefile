@@ -206,6 +206,33 @@ Http.cpp.s:
 	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/Http.cpp.s
 .PHONY : Http.cpp.s
 
+Send.o: Send.cpp.o
+
+.PHONY : Send.o
+
+# target to build an object file
+Send.cpp.o:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/Send.cpp.o
+.PHONY : Send.cpp.o
+
+Send.i: Send.cpp.i
+
+.PHONY : Send.i
+
+# target to preprocess a source file
+Send.cpp.i:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/Send.cpp.i
+.PHONY : Send.cpp.i
+
+Send.s: Send.cpp.s
+
+.PHONY : Send.s
+
+# target to generate assembly for a file
+Send.cpp.s:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/Send.cpp.s
+.PHONY : Send.cpp.s
+
 Server.o: Server.cpp.o
 
 .PHONY : Server.o
@@ -260,6 +287,33 @@ Time.cpp.s:
 	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/Time.cpp.s
 .PHONY : Time.cpp.s
 
+main.o: main.cpp.o
+
+.PHONY : main.o
+
+# target to build an object file
+main.cpp.o:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.o
+.PHONY : main.cpp.o
+
+main.i: main.cpp.i
+
+.PHONY : main.i
+
+# target to preprocess a source file
+main.cpp.i:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.i
+.PHONY : main.cpp.i
+
+main.s: main.cpp.s
+
+.PHONY : main.s
+
+# target to generate assembly for a file
+main.cpp.s:
+	cd /home/llz/code/HTTPserver/build && $(MAKE) -f src/CMakeFiles/mywebserver.dir/build.make src/CMakeFiles/mywebserver.dir/main.cpp.s
+.PHONY : main.cpp.s
+
 sub.o: sub.cpp.o
 
 .PHONY : sub.o
@@ -305,12 +359,18 @@ help:
 	@echo "... Http.o"
 	@echo "... Http.i"
 	@echo "... Http.s"
+	@echo "... Send.o"
+	@echo "... Send.i"
+	@echo "... Send.s"
 	@echo "... Server.o"
 	@echo "... Server.i"
 	@echo "... Server.s"
 	@echo "... Time.o"
 	@echo "... Time.i"
 	@echo "... Time.s"
+	@echo "... main.o"
+	@echo "... main.i"
+	@echo "... main.s"
 	@echo "... sub.o"
 	@echo "... sub.i"
 	@echo "... sub.s"

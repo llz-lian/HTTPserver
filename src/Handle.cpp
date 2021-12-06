@@ -7,16 +7,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-
-#include "Event.hpp"
 #include "Handle.hpp"
 #include "StaticNums.hpp"
 using namespace std;
-using PEvent = shared_ptr<NEvent::Event>;
 
-void readData(Event::Event & ev,char * buf)
+int readData(int fd,char * buf)
 {
-    int fd = ev.getFd();
     int read_num = 0;
     while ((read_num = read(fd,buf,sizeof(buf)))>0)
     {
@@ -25,20 +21,18 @@ void readData(Event::Event & ev,char * buf)
     if(read_num<0)
     {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
-            return;
+            return 0;
         else
         {
-            ev.changeStatus(NEvent::STATUS::ERR);
-            return;
+            return -1;
         }
     }
-    ev.changeStatus(NEvent::STATUS::WAITSEND);
+    return 1;
 }
 
 
-int writeFd(PEvent & ev,const char * buff,size_t len)
+int writeFd(int fd,const char * buff,size_t len)
 {
-    int fd = ev->getFd();
     ssize_t written;
     size_t n = len;
     while(len>0)
@@ -46,7 +40,6 @@ int writeFd(PEvent & ev,const char * buff,size_t len)
         if((written = write(fd,buff,len))<=0)
         {
             perror("<writeFd>write err");
-            ev->changeStatus(NEvent::STATUS::ERR);
             if(errno == EINTR)
                 written = 0;
             else
@@ -55,7 +48,6 @@ int writeFd(PEvent & ev,const char * buff,size_t len)
         len -= written;
         buff += written;
     }
-    ev->changeStatus(NEvent::STATUS::WAITREAD);
     return n;
 }
 void getFileType(const char * file_name,char * file_type)
@@ -77,7 +69,7 @@ char * Mmap(const char * file_name,uint file_size)
     if((filefd = open(file_name,O_RDONLY,0))<0)
     {
         perror("<Get::staticGet>open");
-        return;
+        return nullptr;
     }
     int len = lseek(filefd,0,SEEK_END);  
     char *addr = (char *) mmap(0, file_size, PROT_READ, MAP_PRIVATE,filefd, 0);
@@ -85,10 +77,7 @@ char * Mmap(const char * file_name,uint file_size)
     return addr;
 }
 
-void sendFile(PEvent & ev,string & file_name)
-{
 
-}
 
 
 

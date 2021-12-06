@@ -32,7 +32,7 @@
 					]
 				}
 			],
-			"name" : "Debug",
+			"name" : "",
 			"projects" : 
 			[
 				{
@@ -53,7 +53,7 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "mywebserver::@145eef247bfb46b6828c",
-					"jsonFile" : "target-mywebserver-Debug-cc34ffbb616431d9d7cd.json",
+					"jsonFile" : "target-mywebserver-da026c219a111111fc70.json",
 					"name" : "mywebserver",
 					"projectIndex" : 0
 				}
